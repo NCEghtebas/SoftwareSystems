@@ -45,7 +45,8 @@ int value_checker(int val, int count){
 }
 
 /*Third functin out of five
- *Displays the current count*/
+ *Displays the current count (Doesn't
+ *really need to be it's own function)*/
 void current_count(int count){
 	printf("Current count: %i \n", count);
 }
