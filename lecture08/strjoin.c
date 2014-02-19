@@ -14,7 +14,8 @@ char *tracks[] = {
     "Freddie Freeloader",
     "Blue in Green",
     "All Blues",
-    "Flamenco Sketches"
+    "Flamenco Sketches",
+    "" // '' empty chararcters are illegal
 };
 
 /* Returns a heap-allocated string that contains the strings 
@@ -22,14 +23,24 @@ char *tracks[] = {
 */
 char *strjoin(char *array[], int n)
 {
-    // TODO: fill this in
-    return NULL;
+    char *retstr= malloc(sizeof(char)*sizeof(array)); //? forgot how to malloc
+    char *p= retstr;
+    int i = 0;
+    for (i = 0; i < n; ++i)
+    {
+        strcpy(p, array[i]);
+        p+= strlen(array[i]) ;
+        //or we can do this:
+        //strcat(retstr, array[i]);
+        //but it is less efficeint
+    }
+    return retstr;
 }
 
 
 int main (int argc, char *argv[])
 {
-    char *s = strjoin(tracks, 5);
+    char *s = strjoin(tracks, 2);
     printf("%s\n", s);
     return 0;
 }
