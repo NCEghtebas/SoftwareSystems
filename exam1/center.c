@@ -9,6 +9,13 @@ License: Creative Commons Attribution-ShareAlike 3.0
 #include <stdlib.h>
 #include <string.h>
 
+//stolen from web
+char * test (char * s, char c) 
+{ 
+    s[0]==c; 
+    s[1]=='\0'; 
+    return s; 
+} 
 
 // Returns a heap-allocated string with length n, with
 // the given string in the middle, surrounded by fillchar.
@@ -25,12 +32,17 @@ char * center(char *s, int n, char * fillchar)
     //pointer variable for return string.
     char *start= retstr;
 
-    //char * fillstr= conversion of fillchar to string goes here.
+    //cahracter to string conversion logic
+    // uncomment to run the character version of the code.
+    // char fillstr[2];
+ 
+    // test(fillstr, fillchar );
     
     //fillining in initail peicec of fillchar to retstr
     int i;
     for (i = 0; i < n/2; ++i)
     {
+        //strcpy(start, fillstr);
         strcpy(start, fillchar);
         start+=1;
     }
@@ -43,6 +55,7 @@ char * center(char *s, int n, char * fillchar)
     int j;
     for (j = n/2; j < n; ++j)
     {
+        //strcpy(start, fillstr);
         strcpy(start, fillchar);
     }
     return retstr;
@@ -51,7 +64,7 @@ char * center(char *s, int n, char * fillchar)
 
 int main (int argc, char *argv[])
 {
-    //How to convert char into string in c? 
+    //run this if you want characters. THe output is a funny result.
     // char *s = center("Software", 30, '.');
     // printf("%s\n", s);
 
