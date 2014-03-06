@@ -17,6 +17,7 @@
 
 */
 
+#include <stdint.h>
 // generate a random float using the algorithm described
 // at allendowney.com/research/rand
 float my_random_float()
@@ -86,10 +87,42 @@ float my_random_float2()
   return b.f;
 }
 
-// compute a random double using my algorithm
-double my_random_double()
+/*Worked with/got help from Nicole Rifkin, Samantha Kumarasena, Eric Tapan*/
+double my_random_double3()
 {
-  // TODO: fill this in
+  uint64_t x;
+  uint64_t mant;
+  uint64_t exp = 1022;//126;
+  int mask = 1;
+
+  union {
+    double d;
+    //long l;
+    uint64_t l;
+  } b;
+
+  // generate random bits until we see the first set bit
+  while (1) {
+    x = ((uint64_t)random() << 31) + (uint64_t)random();
+    if (x == 0) {
+      exp -= 63;
+    } else {
+      break;
+    }
+  }
+
+  // find the location of the first set bit and compute the exponent
+  while (x & mask) {
+    mask <<= 1;
+    exp--;
+  }
+
+  // use the remaining bit as the mantissa
+  mant = x >> 11;
+  b.l = (exp << 52) | mant;
+
+  return b.d;
+
 }
 
 // return a constant (this is a dummy function for time trials)

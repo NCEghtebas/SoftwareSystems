@@ -1,3 +1,10 @@
+/*
+Answers to hw03:
+2) dummy is fastest implementation
+3) my_random_float is faster than my_random_float2
+5) my_random_double  is faster than my_random_float(?)
+*/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -87,7 +94,7 @@ main (int argc, char *argv[])
   srandom (seed);
   t0 = get_seconds();
   for (i=0; i<iters; i++) {
-    f = my_random_float();
+    f = my_random_double3();
   }
   t1 = get_seconds();
   printf ("mine \t %f ms\n", t1 - t0);
@@ -96,7 +103,7 @@ main (int argc, char *argv[])
   srandom (seed);
   t0 = get_seconds();
   for (i=0; i<iters; i++) {
-    f = my_random_float();
+    f = my_random_double3();
   }
   t1 = get_seconds();
   printf ("mine \t %f ms\n", t1 - t0);
