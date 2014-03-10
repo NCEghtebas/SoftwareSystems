@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <stdint.h>
 
 typedef struct {
     int numer;
@@ -12,20 +13,35 @@ typedef struct {
 // Returns a new Rational with the given numer and denom.
 // If unable to allocate, prints an error message and exits.
 Rational *make_rational(int numer, int denom) {
-    // FILL THIS IN
-    return NULL;
+    Rational *rational= (Rational *) malloc(sizeof(Rational));
+    if (rational == NULL)
+    {
+        (void) fprintf(stderr, "Failure to make rational.");
+        exit(EXIT_FAILURE);
+    }
+    rational-> numer = numer;
+    rational->denom = denom;
+    return rational;
 }
+
+union{
+    float d;
+    int  l;
+}u;
+
 
 // Computes a floating-point approximation of a Rational.
 double rational_to_double(Rational *rational) {
-    // FILL THIS IN
-    return 0.0;
+    //float frational= (float) malloc(sizeof(float));
+    u.l= rational;
+
+    return u.d;
 }
 
 // Multiplies two rational numbers; returns a new Rational.
 Rational *mult_rational(Rational *r1, Rational *r2) {
-    // FILL THIS IN
-    return NULL;
+    Rational *result= r1 * r2;
+    return strdup(result);
 }
 
 // Frees a Rational.
