@@ -3,6 +3,8 @@
 Copyright 2014 Allen Downey
 License: Creative Commons Attribution-ShareAlike 3.0
 
+Edited by: Chloe Eghtebas
+
 */
 
 #include <stdio.h>
