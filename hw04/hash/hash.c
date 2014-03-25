@@ -149,7 +149,10 @@ int equal_string (void *s1, void *s2)
 {
     char * s11= (char *) s1;
     char * s22= (char *) s2;
-    return !memcmp( s1, s2, sizeof(s1));
+    if (strlen(s1) == strlen(s2)){
+        return !memcmp( s1, s2, sizeof(s1));
+    }
+    return 0;
 }
 
 
@@ -248,9 +251,13 @@ Node *prepend(Hashable *key, Value *value, Node *rest)
 /* Looks up a key and returns the corresponding value, or NULL */
 Value *list_lookup(Node *list, Hashable *key)
 {
+
     while(list != NULL)
     {
-        if ( equal_hashable(key, list->key) )
+        if ( list->key == key)
+        /*equal_hashable(key, list->key) 
+         the function equal hashable works... but not when 
+         used in this if statement..?*/
         {
             return list->value;
         }
@@ -283,12 +290,11 @@ void print_map(Map *map)
 {
     int i;
     for (i=0; i<map->n; i++) {
-        printf("%s\n", "in loop");
 	   if (map->lists[i] != NULL) {
 	        printf ("%d\n", i);
 	        print_list (map->lists[i]);
 	   }else{
-            printf("%s\n", "else");
+            
        }
     }
 }
@@ -320,6 +326,7 @@ Value *map_lookup(Map *map, Hashable *key)
         }
         i+=1;
     }
+    return NULL;
 }
 
 
@@ -334,7 +341,7 @@ void print_lookup(Value *value)
 
 int main ()
 {
-    Hashable *hashable1 = make_hashable_int (3);
+    Hashable *hashable1 = make_hashable_int (8);
     Hashable *hashable2 = make_hashable_string ("Allen");
     Hashable *hashable3 = make_hashable_int (8);
     
@@ -346,24 +353,22 @@ int main ()
     Value *value2 = make_string_value ("Downey");
     Node *list = prepend(hashable2, value2, node1);
 
-    Value * value3= make_string_value("Prof");
     //print_list (list);
-
+    
     // run some test lookups
     Value *value = list_lookup (list, hashable1);
-    //print_lookup(value);
+    print_lookup(value);
 
     value = list_lookup (list, hashable2);
-    //print_lookup(value);
+    print_lookup(value);
 
     value = list_lookup (list, hashable3);
-    //print_lookup(value);
+    print_lookup(value);
     
     // make a map
     Map *map = make_map(10);
     map_add(map, hashable1, value1);
     map_add(map, hashable2, value2);
-    //map_add(map, hashable3, value3);
     
     printf ("Map\n");
     print_map(map);
@@ -377,6 +382,6 @@ int main ()
 
     value = map_lookup(map, hashable3);
     print_lookup(value);
-
+    
     return 0;
 }
