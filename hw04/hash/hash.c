@@ -348,12 +348,12 @@ int main ()
     // make a list by hand
     Value *value1 = make_int_value (17);
     Node *node1 = make_node(hashable1, value1, NULL);
-    //print_node (node1);
+    print_node (node1);
 
     Value *value2 = make_string_value ("Downey");
     Node *list = prepend(hashable2, value2, node1);
 
-    //print_list (list);
+    print_list (list);
     
     // run some test lookups
     Value *value = list_lookup (list, hashable1);
