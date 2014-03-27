@@ -107,7 +107,20 @@ void reverse(Node **head) {
 // element between the first and second elements.
 // Returns 0 if successful, -1 if the index is out of range.
 int insert_by_index(Node **head, int val, int index) {
-    // FILL THIS IN
+    Node * inode= *head;
+    int i=0;
+    while(inode!= NULL)
+    {
+        if( i == index){
+            push(&inode, val);
+            inode= inode->next;
+            *head= inode;
+            return 0;
+        }else{
+            inode= inode->next;
+        }
+    }
+
     return -1;
 }
 
@@ -131,6 +144,7 @@ int main() {
     test_list->next->next = make_node(6, NULL);
 
     // insert the odd numbers
+    //printf( "%i\n", insert_by_index(&test_list, 1, 0));
     insert_by_index(&test_list, 1, 0);
     insert_by_index(&test_list, 3, 2);
     insert_by_index(&test_list, 5, 4);
