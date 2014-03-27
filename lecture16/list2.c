@@ -107,17 +107,22 @@ void reverse(Node **head) {
 // element between the first and second elements.
 // Returns 0 if successful, -1 if the index is out of range.
 int insert_by_index(Node **head, int val, int index) {
-    Node * inode= *head;
+    Node * node= *head;
     int i=0;
-    while(inode!= NULL)
+    while(node!= NULL)
     {
         if( i == index){
-            push(&inode, val);
-            inode= inode->next;
-            *head= inode;
+            //add node with val val before node.
+            push(&node, val);
+            //go to next 
+            //node= node->next;
+            //push the value of inode to memory
+            *head= node;
+            //
+            i+=1;
             return 0;
         }else{
-            inode= inode->next;
+            node= node->next;
         }
     }
 
