@@ -113,6 +113,10 @@ Matrix *mult_matrix_func(Matrix *A, Matrix *B) {
     return C;
 }
 
+/*
+ * Adds up all the elements in the matrix
+ * summing the cols first
+ */
 double matrix_sum1(Matrix *A) {
     double total = 0.0;
     int i, j;
@@ -124,7 +128,11 @@ double matrix_sum1(Matrix *A) {
     }
     return total;
 }
-    
+ 
+/*
+ * Adds up all the elements in the matrix
+ * summing the rows first
+ */   
 double matrix_sum2(Matrix *A) {
     double total = 0.0;
     int i, j;
@@ -155,6 +163,75 @@ double *row_sum(Matrix *A) {
     return res;
 }
 
+// Adds up the columns of A and returns a heap-allocated array of doubles.
+double *col_sum(Matrix *A) {
+    double total;
+    int i, j;
+
+    double *res = malloc(A->cols * sizeof(double));
+
+    for (i=0; i<A->cols; i++) {
+    total = 0.0;
+    for (j=0; j<A->rows; j++) {
+        total += A->data[j][i];
+    }
+    res[i] = total;
+    }
+    return res;
+}
+
+/* 
+ * Adds up the forward diagonals of A and returns a double.
+ * if matrix is not square, still computes forward diagonal value
+ */
+double fdiag_sum(Matrix *A) {
+    double total= 0.0;
+    int i;
+
+    double res;// = (double) malloc(sizeof(double));
+    if(A->rows >= A->cols){
+        for (i=0; i<A->cols; i++) {
+            total += A->data[i][i];
+        }
+        res = total;
+        return res;
+    }else if( (A->rows) < (A->cols)){
+        for (i=0; i<A->rows; i++) {
+            total += A->data[i][i];
+        }
+        res = total;
+        return res;    
+    }
+    
+}
+
+/* 
+ * Adds up the backward diagonals of A and returns a double.
+ * if matrix is not square, still computes backward diagonal value
+ */
+double bdiag_sum(Matrix *A) {
+    double total= 0.0;
+    int i;
+
+    double res;// = (double) malloc(sizeof(double));
+    if(A->rows >= A->cols){
+        for (i=0; i<A->cols; i++) {
+            total += A->data[i][A->cols - (i+1)];
+        }
+        res = total;
+        return res;
+    }else if( (A->rows) < (A->cols)){
+        for (i=0; i<A->rows; i++) {
+            total += A->data[i][A->cols - (i+1)];
+        }
+        res = total;
+        return res;    
+    }
+    
+}
+
+
+
 /* 
    http://en.wikipedia.org/wiki/Magic_square
 
@@ -169,12 +246,92 @@ double *row_sum(Matrix *A) {
    Feel free to use row_sum().
 */
 
+/*
+ * Checks to see if sum of all rows are equal. 
+ * returns value of row sum if so and a 0 if not equal
+ */
+double row_equal(Matrix *A){
+    double * rsum = row_sum(A);
+    int i;
+    int res;
+
+    for(i =0; i< (A->rows -1); i++){
+        if(rsum[i] == rsum [i+1]){
+            res = 1;
+        }else{
+            res = 0;
+        }
+    }
+    if (res == 1){
+        return res* rsum[0];
+    }
+    return res;
+}
+
+/*
+ * Checks to see if sum of all cols are equal. 
+ * returns value of col sum if so and a 0 if not equal
+ */
+double col_equal(Matrix *A){
+    double * rsum = row_sum(A);
+    int i;
+    int res;
+
+    for(i =0; i< (A->cols -1); i++){
+        if(rsum[i] == rsum [i+1]){
+            res = 1;
+        }else{
+            res = 0;
+        }
+    }
+    if (res == 1){
+        return res* rsum[0];
+    }
+    return res;
+}
+
+
+/*
+ *Checks to see if matrix is magic square
+ * returns 1 if so and 0 if not
+ */
+int is_magic_square(Matrix *A){
+    double fsumdiag, bsumdiag;
+    double requal, cequal;
+
+    if(A->rows != A->cols){
+        printf("%s\n",  "Matrix is not square.");
+        exit(0);    
+    }else{
+        fsumdiag= fdiag_sum(A);
+        bsumdiag= bdiag_sum(A); 
+        requal = row_equal(A); 
+        cequal = col_equal(A);
+
+        /* checks to see if the numbers in each row, in each column,
+         * the numbers in the forward and backward main diagonals, 
+         * all add up to the same number. If so, matrix is a magic square!
+         */
+        if( (requal == cequal) && (fsumdiag == bsumdiag) && (requal == fsumdiag) && (cequal == bsumdiag)){
+            return 1;
+        }else{
+            return 0;
+        }
+    }
+}
+
 
 int main() {
     int i;
+    double sum;
+    double *sums;
+    double fsumdiag;
+    double bsumdiag;
+    double requal;
 
-    Matrix *A = make_matrix(3, 4);
+    Matrix *A = make_matrix(3, 3);
     consecutive_matrix(A);
+    //increment_matrix(A, 1);
     printf("A\n");
     print_matrix(A);
 
@@ -191,17 +348,39 @@ int main() {
     printf("D\n");
     print_matrix(D);
 
-    double sum = matrix_sum1(A);
+    sum = matrix_sum1(A);
     printf("sum = %lf\n", sum);
 
     sum = matrix_sum2(A);
     printf("sum = %lf\n", sum);
 
-    double *sums = row_sum(A);
+    sums = row_sum(A);
+    requal= row_equal(A);
+    printf("Rows arevqual if not vale not 0. val= %f\n", requal);
     for (i=0; i<A->rows; i++) {
 	printf("row %d\t%lf\n", i, sums[i]);
     }
     // should print 6, 22, 38
+
+    sums = col_sum(A);
+    requal= row_equal(A);
+    printf("Cols arevqual if not vale not 0. val = %f\n", requal);
+    for (i=0; i<A->cols; i++) {
+    printf("column %d\t%lf\n", i, sums[i]);
+    }
+    //should print 12, 15, 18, 21
+
+    printf("diagonals\n");
+
+    fsumdiag= bdiag_sum(A);
+    printf("row %f\n", fsumdiag);
+
+    int yn = is_magic_square(A);
+    if(yn == 1){
+        printf("Matrix is Magic Square! %d\n", yn);
+    }else{
+        printf("Matrix is not magic square. %d\n", yn);
+    }
 
     return 0;
 }
