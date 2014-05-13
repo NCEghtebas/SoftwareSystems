@@ -1,0 +1,4 @@
+*.o
+*.d
+*.gen.c
+combobreaker
